@@ -23,7 +23,7 @@ class SignDictPlugin(InterfaceActionBase):
     name                = 'Sign Dict Plugin'
     description         = 'A sign language dictionary plugin'
     supported_platforms = ['windows', 'osx', 'linux']
-    author              = 'Kovid Goyal'
+    author              = 'Sign Language Team'
     version             = (1, 0, 0)
     minimum_calibre_version = (0, 7, 53)
 

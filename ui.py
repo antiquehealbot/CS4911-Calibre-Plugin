@@ -3,8 +3,6 @@
 from __future__ import (unicode_literals, division, absolute_import,
                         print_function)
 
-from calibre.gui2.viewer.main import main
-
 __license__   = 'GPL v3'
 __copyright__ = '2014, CATS'
 __docformat__ = 'restructuredtext en'
@@ -17,6 +15,8 @@ if False:
 
 # The class that all interface action plugins must inherit from
 from calibre.gui2.actions import InterfaceAction
+
+import re,json,urllib2
 
 class InterfacePlugin(InterfaceAction):
 
@@ -43,6 +43,7 @@ class InterfacePlugin(InterfaceAction):
         # will return a dictionary mapping names to QIcons. Names that
         # are not found in the zip file will result in null QIcons.
         icon = get_icons('images/icon.png')
+        
 
         # The qaction is automatically created from the action_spec defined
         # above
@@ -51,24 +52,23 @@ class InterfacePlugin(InterfaceAction):
 
     def getPlayersForKeyword(self):
         #clean up keyword
-        if main.main.selected_text != None and main.main.selected_text != "":
-            keyword = main.main.selected_text
-            keyword = re.sub("(\'s|\'d|\.|,|\?|!|;|,)","",keyword)
-            keyword = re.sub("(~ |~|_)"," ",keyword)
-            keyword = keyword.strip()
-            #grab info from REST API
-            url = "http://smartsign.imtc.gatech.edu/videos?keywords=" + keyword
-            response = urllib2.urlopen(url)
-            #convert JSON to Python object
-            info = json.load(response)
-            #pull ids from converted JSON
-            ids = []
-            for item in info:
-                ids.append(item["id"])
-            #use ids to build a list of embedded players
-            players = []
-            for i in ids:
-                players.append('<iframe width="640" height="360" align:right src="http://www.youtube.com/embed/' + i + '?rel=0"> </iframe>')
-            print("test")
-            print(keyword)
-            return players
+        keyword = "hello"
+        keyword = re.sub("(\'s|\'d|\.|,|\?|!|;|,)","",keyword)
+        keyword = re.sub("(~ |~|_)"," ",keyword)
+        keyword = keyword.strip()
+        #grab info from REST API
+        url = "http://smartsign.imtc.gatech.edu/videos?keywords=" + keyword
+        response = urllib2.urlopen(url)
+        #convert JSON to Python object
+        info = json.load(response)
+        #pull ids from converted JSON
+        ids = []
+        for item in info:
+            ids.append(item["id"])
+        #use ids to build a list of embedded players
+        players = []
+        for i in ids:
+            players.append('<iframe width="640" height="360" align:right src="http://www.youtube.com/embed/' + i + '?rel=0"> </iframe>')
+        print("keyword is: "+keyword)
+        print("list of players: "+str(players))
+        return players
